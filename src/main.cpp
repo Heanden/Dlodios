@@ -1,3 +1,11 @@
+/*
+ * @Date: 2019-12-15 16:08:59
+ * @LastEditors: Gavin Chen
+ * @Github: https://github.com/Heanden
+ * @课程所用程序: https://eiet.xyz
+ * @个人项目: https://eiet.xyz/ITEM/
+ * @LastEditTime: 2019-12-17 11:27:12
+ */
 #include <arduino.h>
 #include <Wire.h>                   //IIC
 #include <LiquidCrystal_I2C.h>      //LCD1602头文件
@@ -23,8 +31,6 @@ boolean backstate = 1;
 
 void setup()
 {
-  pinMode(6, OUTPUT);
-  digitalWrite(6, HIGH);
   myservo.attach(9); // 控制线连接数字9
   pinMode(KEY, INPUT);
   lcd.init();      //初始化LCD

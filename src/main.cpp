@@ -1,49 +1,49 @@
 /*
  * @Date: 2019-12-15 16:08:59
- * @LastEditors: Gavin Chen
+ * @LastEditors  : Gavin Chen
  * @Github: https://github.com/Heanden
- * @¿Î³ÌËùÓÃ³ÌĞò: https://eiet.xyz
- * @¸öÈËÏîÄ¿: https://eiet.xyz/ITEM/
- * @LastEditTime: 2019-12-17 11:27:12
+ * @è¯¾ç¨‹æ‰€ç”¨ç¨‹åº: https://eiet.xyz
+ * @ä¸ªäººé¡¹ç›®: https://eiet.xyz/ITEM/
+ * @LastEditTime : 2019-12-27 22:34:13
  */
 #include <arduino.h>
 #include <Wire.h>                   //IIC
-#include <LiquidCrystal_I2C.h>      //LCD1602Í·ÎÄ¼ş
-#include <Servo.h>                  //¶æ»úÍ·ÎÄ¼ş
-Servo myservo;                      // ¶¨ÒåServo¶ÔÏóÀ´¿ØÖÆ,¶æ»úÇı¶¯
-LiquidCrystal_I2C lcd(0x27, 16, 2); //ÅäÖÃLCDµØÖ·¼°ĞĞÁĞ
+#include <LiquidCrystal_I2C.h>      //LCD1602å¤´æ–‡ä»¶
+#include <Servo.h>                  //èˆµæœºå¤´æ–‡ä»¶
+Servo myservo;                      // å®šä¹‰Servoå¯¹è±¡æ¥æ§åˆ¶,èˆµæœºé©±åŠ¨
+LiquidCrystal_I2C lcd(0x27, 16, 2); //é…ç½®LCDåœ°å€åŠè¡Œåˆ—
 int pinA = 3;                       //CLK
 int pinB = 4;                       //DT
 int KEY = 5;                        //SW
-int pinA_First;                     //pinAÏÈ×´Ì¬
-int pinA_After;                     //pinAºó×´Ì¬
+int pinA_First;                     //pinAå…ˆçŠ¶æ€
+int pinA_After;                     //pinAåçŠ¶æ€
 int encoderPosCount = 0;
 int countstate = 0;
-int key_state; //KEY ×´Ì¬
+int key_state; //KEY çŠ¶æ€
 int Pw1 = 0;
 int Pw2 = 0;
 int Pw3 = 0;
 int clkcount = 0;
 int keycount = 0;
 int keycounto = 0;
-boolean turndir; //Ğı×ª·½Ïò£¬Ë³Ê±ÕëÎªÕæ£¬ÄæÊ±ÕëÎª¼Ù
+boolean turndir; //æ—‹è½¬æ–¹å‘ï¼Œé¡ºæ—¶é’ˆä¸ºçœŸï¼Œé€†æ—¶é’ˆä¸ºå‡
 boolean backstate = 1;
 
 void setup()
 {
-  myservo.attach(9); // ¿ØÖÆÏßÁ¬½ÓÊı×Ö9
+  myservo.attach(9); // æ§åˆ¶çº¿è¿æ¥æ•°å­—9
   pinMode(KEY, INPUT);
-  lcd.init();      //³õÊ¼»¯LCD
-  lcd.backlight(); //´ò¿ª±³¹â
-  //³õÊ¼»¯Ğı×ª±àÂëÆ÷
+  lcd.init();      //åˆå§‹åŒ–LCD
+  lcd.backlight(); //æ‰“å¼€èƒŒå…‰
+  //åˆå§‹åŒ–æ—‹è½¬ç¼–ç å™¨
   pinMode(pinA, INPUT);
   pinMode(pinB, INPUT);
-  pinA_First = digitalRead(pinA); //¶ÁÈ¡pinAµÄ×îºóÒ»¸ö×´Ì¬
-  Serial.begin(9600);             //³õÊ¼»¯´®¿ÚÍ¨ĞÅ£¬²¢½«²¨ÌØÂÊÉèÖÃÎª9600
-  lcd.setCursor(3, 0);            //µÚÒ»ĞĞ£¬µÚÎåÎ»
-  lcd.print("XXXXXXX ");          //ÄæÊ±Õë
-  lcd.setCursor(15, 0);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-  lcd.print(encoderPosCount / 2); //Î»ÖÃ
+  pinA_First = digitalRead(pinA); //è¯»å–pinAçš„æœ€åä¸€ä¸ªçŠ¶æ€
+  Serial.begin(9600);             //åˆå§‹åŒ–ä¸²å£é€šä¿¡ï¼Œå¹¶å°†æ³¢ç‰¹ç‡è®¾ç½®ä¸º9600
+  lcd.setCursor(3, 0);            //ç¬¬ä¸€è¡Œï¼Œç¬¬äº”ä½
+  lcd.print("XXXXXXX ");          //é€†æ—¶é’ˆ
+  lcd.setCursor(15, 0);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+  lcd.print(encoderPosCount / 2); //ä½ç½®
   lcd.setBacklight(backstate);
   myservo.write(0);
 }
@@ -96,9 +96,9 @@ void loop()
     lcd.setBacklight(backstate = !backstate);
     lcd.noDisplay();
     myservo.write(0);
-    lcd.setCursor(3, 0);   //µÚÒ»ĞĞ£¬µÚÎåÎ»
-    lcd.print("XXXXXXX "); //ÄæÊ±Õë
-    lcd.setCursor(15, 0);  //µÚÒ»ĞĞ£¬µÚÎåÎ»
+    lcd.setCursor(3, 0);   //ç¬¬ä¸€è¡Œï¼Œç¬¬äº”ä½
+    lcd.print("XXXXXXX "); //é€†æ—¶é’ˆ
+    lcd.setCursor(15, 0);  //ç¬¬ä¸€è¡Œï¼Œç¬¬äº”ä½
     lcd.print((encoderPosCount = 0) / 2);
   }
 
@@ -124,16 +124,16 @@ void loop()
     lcd.print("UP ");
   }
 
-  pinA_After = digitalRead(pinA); //¶ÁÈ¡pinAµÄÏÂÒ»¸ö×´Ì¬
-  if (pinA_After != pinA_First)   //ÏÈºóÁ½¸ö×´Ì¬²»µÈ£¬ËµÃ÷ÔÚĞı×ª£¬¶ÁÈ¡pinAÅĞ¶ÏĞı×ª·½Ïò
+  pinA_After = digitalRead(pinA); //è¯»å–pinAçš„ä¸‹ä¸€ä¸ªçŠ¶æ€
+  if (pinA_After != pinA_First)   //å…ˆåä¸¤ä¸ªçŠ¶æ€ä¸ç­‰ï¼Œè¯´æ˜åœ¨æ—‹è½¬ï¼Œè¯»å–pinAåˆ¤æ–­æ—‹è½¬æ–¹å‘
   {
-    if (digitalRead(pinB) != pinA_After) //ÉÏÏÂ²»µÈÎªË³Ê±Õë
+    if (digitalRead(pinB) != pinA_After) //ä¸Šä¸‹ä¸ç­‰ä¸ºé¡ºæ—¶é’ˆ
     {
       encoderPosCount++;
       turndir = true;
     }
 
-    else //ÉÏÏÂÏàµÈÎªË³Ê±Õë
+    else //ä¸Šä¸‹ç›¸ç­‰ä¸ºé¡ºæ—¶é’ˆ
     {
       turndir = false;
       encoderPosCount--;
@@ -150,34 +150,34 @@ void loop()
       if (key_state == 0)
       {
         encoderPosCount = 10;
-        lcd.setCursor(0, 0);            //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-        lcd.print(encoderPosCount / 2); //Î»ÖÃ
+        lcd.setCursor(0, 0);            //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+        lcd.print(encoderPosCount / 2); //ä½ç½®
       }
     }
 
     if (turndir)
     {
-      lcd.setCursor(3, 0);   //µÚÒ»ĞĞ£¬µÚÎåÎ»
-      lcd.print(">>>>>>> "); //Ë³Ê±Õë
+      lcd.setCursor(3, 0);   //ç¬¬ä¸€è¡Œï¼Œç¬¬äº”ä½
+      lcd.print(">>>>>>> "); //é¡ºæ—¶é’ˆ
 
-      lcd.setCursor(15, 0);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-      lcd.print(encoderPosCount / 2); //Î»ÖÃ
+      lcd.setCursor(15, 0);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+      lcd.print(encoderPosCount / 2); //ä½ç½®
     }
 
     else
     {
-      lcd.setCursor(3, 0);   //µÚÒ»ĞĞ£¬µÚÎåÎ»
-      lcd.print("<<<<<<< "); //ÄæÊ±Õë
+      lcd.setCursor(3, 0);   //ç¬¬ä¸€è¡Œï¼Œç¬¬äº”ä½
+      lcd.print("<<<<<<< "); //é€†æ—¶é’ˆ
 
-      lcd.setCursor(15, 0);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-      lcd.print(encoderPosCount / 2); //Î»ÖÃ
+      lcd.setCursor(15, 0);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+      lcd.print(encoderPosCount / 2); //ä½ç½®
     }
   }
 
-  lcd.setCursor(13, 0); //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-  lcd.print(Pw1);       //Î»ÖÃ
-  lcd.setCursor(11, 0); //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-  lcd.print(Pw2);       //Î»ÖÃ
+  lcd.setCursor(13, 0); //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+  lcd.print(Pw1);       //ä½ç½®
+  lcd.setCursor(11, 0); //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+  lcd.print(Pw2);       //ä½ç½®
 
   if (key_state == 0)
   {
@@ -198,23 +198,23 @@ void loop()
     lcd.setCursor(0, 0);
     lcd.print("UP ");
     keycount = 0;
-    lcd.setCursor(0, 1);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-    lcd.print("     error!     "); //Î»ÖÃ
+    lcd.setCursor(0, 1);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+    lcd.print("     error!     "); //ä½ç½®
     delay(200);
-    lcd.setCursor(0, 1);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-    lcd.print("      error!    "); //Î»ÖÃ
+    lcd.setCursor(0, 1);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+    lcd.print("      error!    "); //ä½ç½®
     delay(200);
-    lcd.setCursor(0, 1);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-    lcd.print("    error!      "); //Î»ÖÃ
+    lcd.setCursor(0, 1);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+    lcd.print("    error!      "); //ä½ç½®
     delay(200);
-    lcd.setCursor(0, 1);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-    lcd.print("      error!    "); //Î»ÖÃ
+    lcd.setCursor(0, 1);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+    lcd.print("      error!    "); //ä½ç½®
     delay(200);
-    lcd.setCursor(0, 1);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-    lcd.print("    error!      "); //Î»ÖÃ
+    lcd.setCursor(0, 1);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+    lcd.print("    error!      "); //ä½ç½®
     delay(200);
-    lcd.setCursor(0, 1);           //µÚ¶şĞĞ£¬µÚÊ®ÈıÎ»
-    lcd.print("     error!     "); //Î»ÖÃ
+    lcd.setCursor(0, 1);           //ç¬¬äºŒè¡Œï¼Œç¬¬åä¸‰ä½
+    lcd.print("     error!     "); //ä½ç½®
     delay(200);
     lcd.setCursor(0, 1);
     lcd.print("     Locked     ");
@@ -235,5 +235,5 @@ void loop()
     lcd.noDisplay();
   }
   clkcount++;
-  pinA_First = pinA_After; //ºó×´Ì¬±äÎªÏÈ×´Ì¬
+  pinA_First = pinA_After; //åçŠ¶æ€å˜ä¸ºå…ˆçŠ¶æ€
 }
